@@ -1,0 +1,13 @@
+enable_cache: True
+enable_step_logs: True
+
+steps:
+  load_data:
+    parameters:
+      dataset: "merve/vqav2-small"
+      image_row: "image"
+      split: "validation"
+  generate_alt_text:
+    parameters:
+      image_row: "image"
+      openai_model: "gpt-4.1-nano"
