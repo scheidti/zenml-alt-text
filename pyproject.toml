@@ -1,0 +1,10 @@
+[project]
+name = "zenml-alt-text"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "unsloth>=2025.7.3",
+    "zenml==0.84.0",
+]
