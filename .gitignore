@@ -17,3 +17,6 @@ wheels/
 
 # Environment variables
 .env
+
+# Batch files
+batches/*.jsonl
