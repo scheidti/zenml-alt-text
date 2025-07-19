@@ -1,6 +1,9 @@
 import logging
+from dotenv import load_dotenv
 
 from pipelines.data_preparation_pipeline import data_preparation_pipeline
+
+load_dotenv()
 
 
 def main() -> None:

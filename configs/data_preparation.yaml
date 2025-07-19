@@ -7,7 +7,9 @@ steps:
       dataset: "merve/vqav2-small"
       image_row: "image"
       split: "validation"
-  generate_alt_text:
+  generate_alt_text_batch_files:
     parameters:
       image_row: "image"
       openai_model: "gpt-4.1-nano"
+      batch_size: 2000
+      path: "./batches"
