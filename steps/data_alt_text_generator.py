@@ -21,10 +21,15 @@ def generate_alt_text_batch_files(
     path: str = "./batches",
 ) -> list[Path]:
     dataset_size = len(data)
-    batches = [data.select(range(i, min(i + batch_size, dataset_size))) for i in range(0, dataset_size, batch_size)]
+    batches = [
+        data.select(range(i, min(i + batch_size, dataset_size)))
+        for i in range(0, dataset_size, batch_size)
+    ]
     files = []
     index = 0
-    logger.info(f"Generating alt text for {dataset_size} rows in batches of {batch_size}")
+    logger.info(
+        f"Generating alt text for {dataset_size} rows in batches of {batch_size}"
+    )
 
     for batch in batches:
         logger.info(f"Processing batch {batches.index(batch) + 1}/{len(batches)}")
