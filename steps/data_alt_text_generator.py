@@ -1,14 +1,14 @@
-import logging
 import json
 
 from pathlib import Path
 from zenml import step
+from zenml.logger import get_logger
 from datasets import Dataset
 
 from utils.images import image_to_base64
 from utils.prompts import generate_alt_text_prompt
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @step
@@ -50,9 +50,9 @@ def generate_alt_text_batch_files(
                     {
                         "role": "user",
                         "content": [
-                            {"type": "input_text", "text": generate_alt_text_prompt},
+                            {"type": "text", "text": generate_alt_text_prompt},
                             {
-                                "type": "input_image",
+                                "type": "image_url",
                                 "image_url": f"data:image/{format};base64,{base64}",
                             },
                         ],
