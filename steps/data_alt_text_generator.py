@@ -53,7 +53,9 @@ def generate_alt_text_batch_files(
                             {"type": "text", "text": generate_alt_text_prompt},
                             {
                                 "type": "image_url",
-                                "image_url": f"data:image/{format};base64,{base64}",
+                                "image_url": {
+                                    "url": f"data:image/{format};base64,{base64}",
+                                },
                             },
                         ],
                     }
