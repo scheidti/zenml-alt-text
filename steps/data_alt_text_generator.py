@@ -1,15 +1,14 @@
 import logging
-from pathlib import Path
+import json
 
+from pathlib import Path
 from zenml import step
 from datasets import Dataset
-from openai import OpenAI
 
 from utils.images import image_to_base64
 from utils.prompts import generate_alt_text_prompt
 
 logger = logging.getLogger(__name__)
-client = OpenAI()
 
 
 @step
@@ -63,7 +62,7 @@ def generate_alt_text_batch_files(
 
             index += 1
 
-        batch_path.write_text("\n".join([str(item) for item in batch_data]))
+        batch_path.write_text("\n".join([json.dumps(item) for item in batch_data]))
         files.append(batch_path)
         logger.info(f"Batch {batches.index(batch)} saved to {batch_path}")
 
