@@ -1,9 +1,8 @@
-import logging
-
 from zenml import step
+from zenml.logger import get_logger
 from datasets import load_dataset, Dataset
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @step

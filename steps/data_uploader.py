@@ -1,12 +1,11 @@
-import logging
-
 from pathlib import Path
 from zenml import step
+from zenml.logger import get_logger
 from openai import OpenAI
 
 from utils.pydantic_models import BatchFileTaskList, BatchFileTask
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 client = OpenAI()
 
 
