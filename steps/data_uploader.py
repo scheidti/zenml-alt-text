@@ -22,6 +22,7 @@ def upload_files_to_openai(files: list[Path]) -> BatchFileTaskList:
             path=str(path),
             status="pending",
             result_file_id=None,
+            batch_id=None,
         )
         logger.info(f"File uploaded with ID: {task.file_id}")
         tasks.append(task)

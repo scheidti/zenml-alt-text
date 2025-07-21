@@ -31,6 +31,8 @@ def wait_and_update_batch(
     wait_seconds: int = 60,
 ) -> BatchFileTaskList:
     for task in task_list.tasks:
+        # TODO: Use batch_id to check if the task already has a batch
+        # if batch_id is None, check by file_id
         for batch in openai.batches.list():
             if batch.input_file_id == task.file_id:
                 task.status = batch.status
