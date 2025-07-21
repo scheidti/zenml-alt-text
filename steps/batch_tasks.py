@@ -1,12 +1,13 @@
-import time
+from openai import OpenAI
 from zenml import step
 from zenml.client import Client
 from zenml.logger import get_logger
+from time import sleep
 
-from services.openai_batch_service import start_openai_batch_service
-from utils.pydantic_models import BatchFileTaskList, BatchFileTask
+from utils.pydantic_models import BatchFileTaskList
 
 client = Client()
+openai = OpenAI()
 logger = get_logger(__name__)
 
 
@@ -27,29 +28,56 @@ def load_batch_task_list(
 @step(enable_cache=False)
 def wait_and_update_batch(
     task_list: BatchFileTaskList,
-    # task: BatchFileTask | None,
-    wait_time: int = 300,
+    wait_seconds: int = 60,
 ) -> BatchFileTaskList:
     for task in task_list.tasks:
-        if task is None:
-            logger.info("No task or service to wait for.")
-            return task_list
+        for batch in openai.batches.list():
+            if batch.input_file_id == task.file_id:
+                task.status = batch.status
+                task.result_file_id = getattr(batch, "output_file_id", None)
+                task.batch_id = batch.id
+                logger.info(
+                    f"Found existing OpenAI Batch {batch.id} for task {task.file_id}."
+                )
+                break
 
-        logger.info(f"Waiting for task {task.file_id} to complete.")
-        service = start_openai_batch_service(task.file_id, name=f"batch_{task.file_id}")
+    do_not_work_status = [
+        "validating",
+        "finalizing",
+        "completed",
+        "cancelling",
+        "cancelled",
+    ]
+    stop_working_status = ["failed", "expired", "cancelled", "completed"]
 
-        while service.is_running:
-            time.sleep(wait_time)
-            service.update_status()
+    for task in task_list.tasks:
+        if task.status in do_not_work_status:
+            logger.info(f"Task {task.file_id} is in status {task.status}, ignoring.")
+            continue
 
-        logger.info(
-            f"Task {task.file_id} completed with status: {service.status.openai_state}"
-        )
+        logger.info(f"Starting OpenAI Batch for task {task.file_id}.")
+        if task.status != "in_progress":
+            # Only create a new batch if the task is not already in progress
+            job = openai.batches.create(
+                input_file_id=task.file_id,
+                endpoint="/v1/chat/completions",
+                completion_window="24h",
+            )
+            task.batch_id = job.id
+            task.status = job.status
+            logger.info(
+                f"Created OpenAI Batch with ID {task.batch_id} for task {task.file_id}."
+            )
 
-        if service.status.openai_state != "completed":
-            task.status = "failed"
-        else:
-            task.status = "done"
-            task.result_file_id = service.status.result_file_id
+        # Wait for the task to complete or reach a terminal status
+        while task.status not in stop_working_status:
+            sleep(wait_seconds)
+            job = openai.batches.retrieve(task.batch_id)
+            task.status = job.status
+            task.result_file_id = getattr(job, "output_file_id", None)
+            logger.info(f"Updated task {task.file_id} status to {task.status}.")
 
-    return task_list    
+    for task in task_list.tasks:
+        print(f"{task}")
+
+    return task_list
