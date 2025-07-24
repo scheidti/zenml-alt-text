@@ -1,3 +1,4 @@
+from pathlib import Path
 from openai import OpenAI
 from zenml import step
 from zenml.client import Client
@@ -83,3 +84,28 @@ def wait_and_update_batch(
         print(f"{task}")
 
     return task_list
+
+
+@step()
+def download_batch_results(
+    task_list: BatchFileTaskList,
+) -> list[Path]:
+    logger.info("Downloading batch results for all tasks.")
+    downloaded_files = []
+
+    for task in task_list.tasks:
+        if task.status == "completed" and task.result_file_id:
+            logger.info(f"Downloading result file for task {task.file_id}.")
+            file_content = openai.files.content(task.result_file_id)
+            file_path = Path(f"batches/{task.file_id}_result.jsonl")
+
+            with open(file_path, "wb") as f:
+                f.write(file_content.read())
+
+            downloaded_files.append(file_path)
+            logger.info(f"Downloaded result file to {file_path}.")
+        else:
+            logger.warning(f"No result file for task {task.file_id}.")
+
+    logger.info(f"Downloaded {len(downloaded_files)} result files.")
+    return downloaded_files
