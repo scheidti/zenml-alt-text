@@ -14,8 +14,9 @@ logger = get_logger(__name__)
 
 
 @pipeline(name="alt_text_batch_processing_pipeline")
-def batch_processing_pipeline():
+def batch_processing_pipeline() -> str:
     tasks = load_batch_task_list()
     worked_tasks = wait_and_update_batch(tasks)
     result_files = download_batch_results(worked_tasks)
-    add_batch_results_to_dataset(result_files=result_files)
+    hf_repo_id = add_batch_results_to_dataset(result_files=result_files)
+    return hf_repo_id
