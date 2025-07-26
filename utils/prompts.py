@@ -12,7 +12,7 @@ Avoid phrases like "image of" unless essential. Provide only the alt text withou
 """
 
 
-def format_data_for_training(sample):
+def format_data_for_training(sample, image_row = "image", alt_text_row = "alt_text"):
     return {
         "messages": [
             {
@@ -28,13 +28,13 @@ def format_data_for_training(sample):
                     },
                     {
                         "type": "image",
-                        "image": sample["image"],
+                        "image": sample[image_row],
                     },
                 ],
             },
             {
                 "role": "assistant",
-                "content": [{"type": "text", "text": sample["alt_text"]}],
+                "content": [{"type": "text", "text": sample[alt_text_row]}],
             },
         ],
     }
