@@ -6,7 +6,6 @@ class BatchFileTask(BaseModel):
     file_id: str
     path: str
     status: Literal[
-        "pending", # TODO: remove "pending" from the list of statuses
         "validating",
         "failed",
         "in_progress",
@@ -15,7 +14,7 @@ class BatchFileTask(BaseModel):
         "expired",
         "cancelling",
         "cancelled",
-    ] = "pending"
+    ] = "validating"
     result_file_id: str | None = None
     batch_id: str | None = None
 
