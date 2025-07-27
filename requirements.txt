@@ -77,7 +77,7 @@ nvidia-cusparselt-cu12==0.6.3
 nvidia-nccl-cu12==2.26.2
 nvidia-nvjitlink-cu12==12.6.85
 nvidia-nvtx-cu12==12.6.77
-openai==1.97.0
+openai==1.97.1
 packaging==25.0
 pandas==2.3.1
 parso==0.8.4
@@ -85,6 +85,7 @@ passlib==1.7.4
 peft==0.16.0
 pexpect==4.9.0
 pillow==11.3.0
+pip==25.1.1
 prompt-toolkit==3.0.51
 propcache==0.3.2
 protobuf==3.20.3
@@ -118,6 +119,7 @@ sqlalchemy-utils==0.41.2
 sqlmodel==0.0.18
 stack-data==0.6.3
 sympy==1.14.0
+timm==1.0.19
 tokenizers==0.21.2
 torch==2.7.1
 torchvision==0.22.1
