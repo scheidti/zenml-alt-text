@@ -1,0 +1,7 @@
+enable_cache: True
+enable_step_logs: True
+
+steps:
+  wait_and_update_batch:
+    parameters:
+      wait_seconds: 60
