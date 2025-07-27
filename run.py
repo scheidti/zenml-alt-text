@@ -1,11 +1,11 @@
 import click
 from dotenv import load_dotenv
 
-from pipelines.data_preparation_pipeline import data_preparation_pipeline
-from pipelines.batch_processing_pipeline import batch_processing_pipeline
-from pipelines.training_pipeline import training_pipeline
-
 load_dotenv()
+
+from pipelines.data_preparation_pipeline import data_preparation_pipeline # noqa: E402
+from pipelines.batch_processing_pipeline import batch_processing_pipeline  # noqa: E402
+from pipelines.training_pipeline import training_pipeline # noqa: E402
 
 
 @click.command()
