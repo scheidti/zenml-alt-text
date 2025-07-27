@@ -1,10 +1,12 @@
 [project]
 name = "zenml-alt-text"
 version = "0.1.0"
-description = "Add your description here"
+description = "Fine-tuning LLM for alternative text generation."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "openai>=1.97.1",
+    "timm>=1.0.19",
     "unsloth>=2025.7.3",
     "zenml==0.84.0",
 ]
