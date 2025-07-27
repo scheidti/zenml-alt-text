@@ -1,4 +1,5 @@
 import torch
+import torch._dynamo as dynamo
 from zenml import step
 from zenml.logger import get_logger
 from datasets import DatasetDict
@@ -9,6 +10,7 @@ from trl import SFTTrainer, SFTConfig
 from utils.prompts import format_data_for_training
 
 logger = get_logger(__name__)
+dynamo.config.cache_size_limit = 2048
 
 
 @step
